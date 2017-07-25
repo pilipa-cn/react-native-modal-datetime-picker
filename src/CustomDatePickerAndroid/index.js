@@ -20,7 +20,7 @@ export default class CustomDatePickerAndroid extends Component {
   static defaultProps = {
     date: new Date(),
     mode: 'date',
-    datePickerModeAndroid: 'default',
+    datePickerModeAndroid: 'calendar',
     is24Hour: true,
     isVisible: false,
     onHideAfterConfirm: () => {},

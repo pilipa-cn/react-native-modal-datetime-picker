@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DatePickerIOS, Text, TouchableOpacity, View } from 'react-native';
-import ReactNativeModal from 'react-native-modal';
+import { DatePickerIOS, Text, TouchableOpacity, View ,Modal} from 'react-native';
 
 import styles from './index.style';
 
@@ -26,7 +25,7 @@ export default class CustomDatePickerIOS extends Component {
 
   static defaultProps = {
     cancelTextIOS: 'Cancel',
-    confirmTextIOS: 'Confirm',
+    confirmTextIOS: '确认',
     date: new Date(),
     mode: 'date',
     titleIOS: 'Pick a date',
@@ -120,13 +119,25 @@ export default class CustomDatePickerIOS extends Component {
     }
     const cancelButton = <Text style={styles.cancelText}>{cancelTextIOS}</Text>;
     return (
-      <ReactNativeModal
+      <Modal
         isVisible={isVisible}
         style={[styles.contentContainer, contentContainerStyleIOS]}
         onModalHide={this._handleOnModalHide}
+        transparent={true} //背景透明
       >
+        <TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={this._handleCancel}//点击灰色区域消失
+        >
+
         <View style={[styles.datepickerContainer, datePickerContainerStyleIOS]}>
-          {customTitleContainerIOS || titleContainer}
+          <View style={styles.contentstyle}>
+          {customTitleContainerIOS || <View style={styles.confirmButton}>
+          <TouchableOpacity
+              onPress={this._handleConfirm}
+              disabled={this.state.userIsInteractingWithPicker}
+          >
+              {confirmButton}
+          </TouchableOpacity>
+          </View>}
           <View onStartShouldSetResponderCapture={this._handleUserTouchInit}>
             <DatePickerIOS
               date={this.state.date}
@@ -135,22 +146,25 @@ export default class CustomDatePickerIOS extends Component {
               {...otherProps}
             />
           </View>
-          <View style={styles.confirmButton}>
-            <TouchableOpacity
-              onPress={this._handleConfirm}
-              disabled={this.state.userIsInteractingWithPicker}
-            >
-              {confirmButton}
-            </TouchableOpacity>
+          {/*<View style={styles.confirmButton}>*/}
+            {/*<TouchableOpacity*/}
+              {/*onPress={this._handleConfirm}*/}
+              {/*disabled={this.state.userIsInteractingWithPicker}*/}
+            {/*>*/}
+              {/*{confirmButton}*/}
+            {/*</TouchableOpacity>*/}
+          {/*</View>*/}
           </View>
         </View>
 
-        <View style={styles.cancelButton}>
-          <TouchableOpacity onPress={this._handleCancel}>
-            {customCancelButtonIOS || cancelButton}
-          </TouchableOpacity>
-        </View>
-      </ReactNativeModal>
+        {/*<View style={styles.cancelButton}>*/}
+          {/*<TouchableOpacity onPress={this._handleCancel}>*/}
+            {/*{customCancelButtonIOS || cancelButton}*/}
+          {/*</TouchableOpacity>*/}
+        {/*</View>*/}
+        </TouchableOpacity>
+
+      </Modal>
     );
   }
 }
